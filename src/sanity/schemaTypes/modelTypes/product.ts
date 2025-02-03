@@ -1,4 +1,4 @@
-export default {
+const productSchema = {
   name: 'product',
   type: 'document',
   title: 'Product',
@@ -33,12 +33,18 @@ export default {
     },
     { name: 'material', type: 'string', title: 'Material' },
     { name: 'color', type: 'string', title: 'Color' },
-    { name: 'stock', title: 'Stock',  type: 'reference',
+    { 
+      name: 'stock', 
+      title: 'Stock',  
+      type: 'reference',
       to: [{ type: 'inventory' }], // Reference to the inventory schema 
-      },
-    { name: 'image', type: 'image', title: 'Image' , options: {
-      hotspot: true
-    }},
+    },
+    { 
+      name: 'image', 
+      type: 'image', 
+      title: 'Image', 
+      options: { hotspot: true }
+    },
     { name: 'rating', type: 'number', title: 'Rating' },
     {
       name: 'rating_counts',
@@ -62,3 +68,5 @@ export default {
     { name: 'tags', type: 'array', title: 'Tags', of: [{ type: 'string' }] },
   ],
 };
+
+export default productSchema;

@@ -8,7 +8,7 @@ import { client } from "@/sanity/lib/client";
 import { CardProps } from "../../../types/components";
 
 const ProductsComponent = () => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+   
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isMaterialOpen, setIsMaterialOpen] = useState(false);
@@ -25,7 +25,6 @@ const ProductsComponent = () => {
 
   const [productData, setProductData] = useState<CardProps[] | null>(null);
 
-  const toggleFilterMenu = () => setIsFilterOpen(!isFilterOpen);
   const toggleSortMenu = () => setIsSortOpen(!isSortOpen);
   const toggleCategoryMenu = () => setIsCategoryOpen(!isCategoryOpen);
   const toggleMaterialMenu = () => setIsMaterialOpen(!isMaterialOpen);

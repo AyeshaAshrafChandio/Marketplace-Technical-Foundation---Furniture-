@@ -1,10 +1,9 @@
-"use client";
-import { use, useEffect, useState } from "react";
+ "use client";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import ItemCard from "./ItemCard";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { CartItem } from "../../../types/components";
 
 const CheckoutModal = dynamic(() => import("../OrderSystem/CheckoutModal"), {
   ssr: false,
@@ -13,12 +12,16 @@ const CheckoutModal = dynamic(() => import("../OrderSystem/CheckoutModal"), {
 const UserCartComponent = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orderSucess, setOrderSuccess ] = useState<any | boolean>(false);
+  const [, setOrderSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [trackingNumber, setTrackingNumber] = useState("");
+  const [trackingStep, setTrackingStep] = useState(1);
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     setCartItems(cart);
-    console.log("cart:",cart);
+    console.log("cart:", cart);
   }, []);
 
   const removeItemFromCart = (productId: number) => {
@@ -60,13 +63,31 @@ const UserCartComponent = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmitForm = (formData: any) => {
-    console.log(formData);
-    localStorage.removeItem("cart");
-    setCartItems([]);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleSubmitTracking = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate tracking number submission
+    setTimeout(() => {
+      setTrackingStep(2); // Move to next step (show success message)
+      setIsSubmitting(false);
+    }, 2000); // Simulate delay in submission
   };
 
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCheckoutSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate checkout form submission
+    setTimeout(() => {
+      setCheckoutSuccess(true); // Show success message after submission
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsModalOpen(false); // Close the modal after 2 seconds
+        setCheckoutSuccess(false); // Reset checkout success
+      }, 2000); // Close modal after 2 seconds
+    }, 2000); // Simulate submission time
+  };
 
   return (
     <div className="relative bg-lightGray h-full mx-auto w-full lg:px-0 py-4 px-6 user-cart">
@@ -74,19 +95,8 @@ const UserCartComponent = () => {
         Your shopping cart
       </h3>
 
-      <div className="hidden lg:block md:m-[2rem]">
-        <div className="flex relative">
-          <p className="pl-[1rem] text-lg font-clash font-normal leading-[19.6px] text-darkPrimary">
-            Product
-          </p>
-          <p className="pl-[23.5rem] font-clash font-normal text-lg leading-[19.6px] text-darkPrimary">
-            Total
-          </p>
-        </div>
-        <hr className="bg-lightGray" />
-      </div>
-
       <div className="mx-auto md:mx-4 flex md:flex-row flex-col md:justify-between mt-8 gap-4">
+        {/* Cart Items */}
         <div className="w-full md:w-2/3">
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
@@ -102,12 +112,11 @@ const UserCartComponent = () => {
               />
             ))
           ) : (
-            <p className="text-center text-gray-500 mt-4">
-              Your cart is empty.
-            </p>
+            <p className="text-center text-gray-500 mt-4">Your cart is empty.</p>
           )}
         </div>
 
+        {/* Cart Summary */}
         <div className="w-full md:w-1/3 p-4 bg-white rounded-lg shadow-md mx-auto md:mx-4">
           <h4 className="font-clash text-darkPrimary text-xl mb-4">Summary</h4>
           <div className="space-y-4">
@@ -129,13 +138,50 @@ const UserCartComponent = () => {
               £{calculateSubtotal().toFixed(2)}
             </p>
           </div>
-          <div className="flex justify-between">
-            <p className="font-satoshi text-lg text-darkPrimary">
-              Taxes & Shipping
-            </p>
-            <p className="font-satoshi text-lg text-green-500">(Free)</p>
+
+          {/* Tracking Form */}
+          <div className="mt-6">
+            {trackingStep === 1 ? (
+              <form onSubmit={handleSubmitTracking}>
+                <label className="block text-lg">Enter Tracking Number:</label>
+                <input
+                  type="text"
+                  value={trackingNumber}
+                  onChange={(e) => setTrackingNumber(e.target.value)}
+                  placeholder="Tracking Number"
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+                {isSubmitting ? (
+                  <div className="mt-4 text-green-500">Submitting...</div>
+                ) : (
+                  <button
+                    type="submit"
+                    className="mt-4 px-6 py-2 bg-darkPrimary text-white rounded-md"
+                  >
+                    Submit
+                  </button>
+                )}
+              </form>
+            ) : (
+              <div className="text-green-500">
+                <p>Tracking number submitted successfully!</p>
+                <div className="animate-ping inline-block ml-2">✔️</div>
+              </div>
+            )}
           </div>
 
+          {/* Checkout Form Success Animation */}
+          <div className="mt-6">
+            {checkoutSuccess && (
+              <div className="text-green-500">
+                <p>Checkout submitted successfully!</p>
+                <div className="animate-ping inline-block ml-2">✔️</div>
+              </div>
+            )}
+          </div>
+
+          {/* Checkout Section */}
           <div className="flex justify-between lg:items-center mt-6 lg:flex-row flex-col lg:gap-0 gap-4">
             <SignedOut>
               <SignInButton mode="modal">
@@ -155,22 +201,16 @@ const UserCartComponent = () => {
             </SignedIn>
 
             {isModalOpen && (
-        <CheckoutModal
-        isOpen={setIsModalOpen}
-          onSubmit={(formData) => {
-            console.log("Order Submitted", formData);
-            setTimeout(() => {
-              setIsModalOpen(false); // Close the modal after actions are completed
-              setOrderSuccess(false); // Reset order success status
-            }, 5000); 
-          }}
-          cartItems={cartItems}
-          closeModal={handleCloseModal}
-          orderSuccess={setOrderSuccess}
-          setCartItems={setCartItems} // Pass setCartItems function
-          calculateSubtotal={calculateSubtotal}
-        />
-      )}
+              <CheckoutModal
+                isOpen={setIsModalOpen}
+                onsubmit={handleCheckoutSubmit} // Using handleCheckoutSubmit
+                cartItems={cartItems}
+                closeModal={handleCloseModal}
+                orderSuccess={setOrderSuccess}
+                setCartItems={setCartItems}
+                calculateSubtotal={calculateSubtotal}
+              />
+            )}
 
             <button className="px-6 py-2 bg-darkPrimary text-white rounded-md hover:bg-navbarColor">
               <Link href="/products">Continue Shopping</Link>

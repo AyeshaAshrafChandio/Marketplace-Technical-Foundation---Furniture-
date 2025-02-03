@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useInsertionEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {CartItem } from "../../../types/components";
 import { createOrUpdateUser } from "@/actions/createUser";
 import { createOrder } from "@/actions/createOrder";
@@ -7,10 +7,11 @@ import { createShipment } from "@/actions/createShipment";
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
 
+
 const CheckoutModal = ({
   isOpen,
   closeModal,
-  onSubmit,
+  
   orderSuccess,
   setCartItems,
   calculateSubtotal,
@@ -18,7 +19,7 @@ const CheckoutModal = ({
 }: {
   isOpen: any;
   closeModal: () => void;
-  onSubmit: (formData: any) => void;
+  onsubmit: (formData: any) => void;
   orderSuccess: any;
   setCartItems: any | CartItem;
   calculateSubtotal: number | any;
@@ -240,11 +241,6 @@ const formattedDateTime = `${year}-${month}-${day} ${String(hours).padStart(2, '
           }
       
           // Store email parameters (sent to admin)
-          const storeEmailParams = {
-            ...customerEmailParams,
-            customer_email: userData.email,
-            to_email: "ahchandio24@gmail.com",
-          };
     
           // Sending email to customer
           await emailjs.send(

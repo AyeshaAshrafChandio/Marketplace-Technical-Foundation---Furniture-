@@ -4,11 +4,9 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ProductCard from "../reuseableComponents/ProductCard";
-import FeatureCard from "../reuseableComponents/FeatureCard";
 import SignUp from "../heroSection/SignUp";
 import { CardProps } from "../../../types/components";
 import { client } from "@/sanity/lib/client";
-import { useRouter } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -19,9 +17,7 @@ const ProductCardDetails = () => {
   const productSlug = params?.id;
   const [details, setDetails] = useState<CardProps | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [productData, setProductData] = useState<CardProps[] | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -120,10 +116,6 @@ const ProductCardDetails = () => {
     }
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
-    setIsModalOpen(true);
-    setTimeout(() => {
-      setIsModalOpen(false);
-    }, 3000);
   };
 
   return (

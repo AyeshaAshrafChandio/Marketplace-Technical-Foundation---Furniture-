@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "import-data": "node script/importSanityData.mjs"
-  
   },
   "dependencies": {
     "@clerk/nextjs": "^6.10.2",
@@ -17,6 +16,7 @@
     "@sanity/vision": "^3.70.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
+    "framer-motion": "^12.0.11",
     "module-alias": "^2.2.3",
     "next": "14.2.19",
     "next-sanity": "^9.8.38",

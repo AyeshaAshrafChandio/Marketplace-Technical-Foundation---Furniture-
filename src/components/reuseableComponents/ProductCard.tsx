@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { CardProps } from "../../../types/components";
-import { client } from "@/sanity/lib/client";
+{/*import { client } from "@/sanity/lib/client";*/}
 
 const ProductCard: React.FC<{ productData: CardProps }> = ({ productData }) => {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
-  const [cartItems, setCartItems] = useState();
+  const [, setCartItems] = useState();
 
   if (!productData) {
     return null; // Safeguard in case productData is undefined

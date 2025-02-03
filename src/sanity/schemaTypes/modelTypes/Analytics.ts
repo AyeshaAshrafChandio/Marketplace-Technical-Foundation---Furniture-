@@ -1,6 +1,4 @@
-// Analytics or report schema 
-
-export default {
+const analyticsSchema = {
   name: 'analytics',
   type: 'document',
   title: 'Analytics',
@@ -37,10 +35,17 @@ export default {
         }
       ]
     },
-    { name: 'expenses', type: 'object', title: 'Expenses', fields: [
-      { name: 'marketing', type: 'number', title: 'Marketing Expense' },
-      { name: 'restocking', type: 'number', title: 'Restocking Expense' }
-    ] },
+    { 
+      name: 'expenses', 
+      type: 'object', 
+      title: 'Expenses', 
+      fields: [
+        { name: 'marketing', type: 'number', title: 'Marketing Expense' },
+        { name: 'restocking', type: 'number', title: 'Restocking Expense' }
+      ] 
+    },
     { name: 'createdAt', type: 'datetime', title: 'Report Created At' }
   ]
 };
+
+export default analyticsSchema;

@@ -1,7 +1,6 @@
-// schemas/salesRecord.ts
 import { Rule } from '@sanity/types';
 
-export default {
+const orderSchema = {
   name: 'order',
   title: 'Order',
   type: 'document',
@@ -70,3 +69,5 @@ export default {
     },
   ],
 };
+
+export default orderSchema;

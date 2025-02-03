@@ -22,7 +22,7 @@ const ItemCard: React.FC<ExtendedCardProps> = ({
 
   return (
     <div className="flex md:flex-row flex-col gap-4 bg-white rounded-lg p-4 shadow-md my-2">
-      <img
+      <Image
         src={image}
         alt={`${name} Image`}
         width={200}
