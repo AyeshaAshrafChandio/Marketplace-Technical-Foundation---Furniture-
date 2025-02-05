@@ -23,7 +23,7 @@ const ProductCardDetails = () => {
     const fetchProductDetails = async () => {
       try {
         const productDetails = await client.fetch(
-          `*[_type=="product" && slug.current == $slug][0]{
+          `*[_type=="product"][5]{
             id,
             name,
             description,
